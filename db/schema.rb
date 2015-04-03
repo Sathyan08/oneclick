@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324022612) do
+ActiveRecord::Schema.define(version: 20150402144656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -309,6 +309,61 @@ ActiveRecord::Schema.define(version: 20150324022612) do
   create_table "relationship_statuses", force: true do |t|
     t.string "name", limit: 64
     t.string "code"
+  end
+
+  create_table "reporting_filter_fields", force: true do |t|
+    t.integer  "reporting_report_id",       null: false
+    t.integer  "reporting_filter_group_id", null: false
+    t.integer  "reporting_filter_type_id",  null: false
+    t.integer  "reporting_lookup_table_id"
+    t.string   "name",                      null: false
+    t.string   "title"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "reporting_filter_fields", ["reporting_filter_group_id"], :name => "index_reporting_filter_fields_on_reporting_filter_group_id"
+  add_index "reporting_filter_fields", ["reporting_filter_type_id"], :name => "index_reporting_filter_fields_on_reporting_filter_type_id"
+  add_index "reporting_filter_fields", ["reporting_lookup_table_id"], :name => "index_reporting_filter_fields_on_reporting_lookup_table_id"
+  add_index "reporting_filter_fields", ["reporting_report_id"], :name => "index_reporting_filter_fields_on_reporting_report_id"
+
+  create_table "reporting_filter_groups", force: true do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reporting_filter_types", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "partial"
+    t.string   "formatter"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reporting_lookup_tables", force: true do |t|
+    t.string   "name",               null: false
+    t.string   "display_field_name", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  create_table "reporting_output_fields", force: true do |t|
+    t.integer  "reporting_report_id", null: false
+    t.string   "name",                null: false
+    t.string   "title"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "reporting_output_fields", ["reporting_report_id"], :name => "index_reporting_output_fields_on_reporting_report_id"
+
+  create_table "reporting_reports", force: true do |t|
+    t.string   "name",        null: false
+    t.string   "description"
+    t.string   "data_source", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "reports", force: true do |t|
