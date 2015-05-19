@@ -137,13 +137,14 @@ class Admin::UsersController < Admin::BaseController
     @user_programs_proxy = UserProgramsProxy.new(@user)
     @user_accommodations_proxy = UserAccommodationsProxy.new(@user)
 
-    render 'edit', alert: "Merging"
+    render 'merge'
     # render 'edit', alert: " #{ I18n.t(:will_merge_accounts) } #{ @user.name }, #{ @sub.name }  "
   end
 
   def merge_submit
     @user = User.find(params[:id])
     @sub = User.find_by(email: params[:sub_email])
+
     User::MergeTwoAccounts(@user, @sub)
     respond_to do |format|
       format.html { redirect_to admin_user_path(@user) }
