@@ -145,7 +145,9 @@ class Admin::UsersController < Admin::BaseController
     @user = User.find(params[:id])
     @sub = User.find_by(email: params[:sub_email])
 
-    User::MergeTwoAccounts(@user, @sub)
+    binding.pry
+
+    # User::MergeTwoAccounts(@user, @sub)
     respond_to do |format|
       format.html { redirect_to admin_user_path(@user) }
       format.json { head :no_content }
