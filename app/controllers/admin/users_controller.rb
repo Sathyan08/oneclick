@@ -127,8 +127,9 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def merge_edit
-    @user = User.find(params[:id])
+    main = User.find(params[:id])
     @sub = User.find_by(email: params[:search])
+    @user = User::AddSubAccount.call(main, @sub)
 
     session[:location] = edit_user_registration_path
     @agency_user_relationship = AgencyUserRelationship.new
@@ -215,7 +216,7 @@ class Admin::UsersController < Admin::BaseController
   private
 
   def user_params_with_password
-    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :password, :password_confirmation, :walking_speed_id, :walking_maximum_distance_id, :preferred_mode_ids => [])
+    params.require(:user).permit(:first_name, :last_name, :email, :preferred_locale, :password, :password_confirmation, :walking_speed_id, :walking_maximum_distance_id, :sub, :preferred_mode_ids => [])
   end
 
   def load_user
